@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Visualization 1: Mastering Matplotlib | Pre-read</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;background:#f7f8fc;color:#1e2a3a;min-height:100vh;position:relative;overflow-x:hidden}
+#math-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.sym{position:absolute;font-family:Georgia,'Times New Roman',serif;color:#b4532a;animation:rise linear infinite;white-space:nowrap;user-select:none}
+@keyframes rise{0%{transform:translateY(105vh) rotate(0);opacity:0}5%{opacity:1}95%{opacity:1}100%{transform:translateY(-12vh) rotate(22deg);opacity:0}}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(180,83,42,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(180,83,42,.045) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+.container{max-width:880px;margin:0 auto;padding:48px 28px 72px;position:relative;z-index:1}
+.header{background:linear-gradient(135deg,#5a1f0a 0%,#8a3415 55%,#c0582a 100%);border-radius:18px;padding:44px 52px;margin-bottom:36px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.header::before{content:'▇';position:absolute;right:-16px;top:-22px;font-size:180px;font-family:Georgia,serif;color:rgba(255,255,255,.05);line-height:1;pointer-events:none}
+.header::after{content:'▁▂▃▄▅▆▇  •  ◦  •  ───';position:absolute;bottom:14px;left:28px;font-size:24px;color:rgba(255,255,255,.08);letter-spacing:20px;font-family:Georgia,serif;pointer-events:none}
+.badge{display:inline-block;background:rgba(255,255,255,.13);color:#ffd9c4;font-size:11px;font-weight:600;letter-spacing:2.2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:18px}
+.header h1{color:#fff;font-size:30px;font-weight:700;line-height:1.25;margin-bottom:10px}
+.header .sub{color:#ffd9c4;font-size:14.5px;opacity:.85}
+.section{background:#fff;border-radius:14px;padding:36px 40px;margin-bottom:24px;box-shadow:0 2px 14px rgba(0,0,0,.06);border-left:5px solid #c0582a;position:relative;overflow:hidden}
+.section::after{content:attr(data-sym);position:absolute;right:22px;bottom:6px;font-size:76px;font-family:Georgia,serif;color:#c0582a;opacity:.06;pointer-events:none;line-height:1}
+h2{color:#5a1f0a;font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#fdeee6;color:#8a3415;font-size:13px;font-weight:700;border-radius:8px;flex-shrink:0}
+.intro{color:#5f7380;font-style:italic;font-size:13.5px;line-height:1.65;margin:14px 0 20px;padding-left:14px;border-left:3px solid #f2cdb9}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead tr{background:#fdeee6}
+th{padding:11px 16px;text-align:left;font-weight:600;color:#5a1f0a;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+tbody tr{border-bottom:1px solid #eef0f5}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#fafbfd}
+td{padding:14px 16px;vertical-align:top;line-height:1.65;color:#2a3a4a}
+td.topic{font-weight:600;color:#8a3415;width:210px}
+ul.uses{list-style:none}
+ul.uses li{padding:13px 0 13px 20px;border-bottom:1px solid #eef0f5;font-size:13.5px;line-height:1.65;position:relative;color:#2a3a4a}
+ul.uses li:last-child{border-bottom:none}
+ul.uses li::before{content:'\25B8';position:absolute;left:0;top:14px;color:#c0582a;font-size:11px}
+ul.uses li strong{color:#5a1f0a}
+.setup{display:flex;flex-direction:column;gap:12px}
+.card{background:#fdf6f2;border:1px solid #f2cdb9;border-radius:10px;padding:16px 20px}
+.card h3{font-size:14px;font-weight:600;color:#8a3415;margin-bottom:6px}
+.card p{font-size:13px;color:#4f6470;line-height:1.65}
+pre{background:#1e2533;color:#e6edf3;font-family:'JetBrains Mono',Consolas,monospace;font-size:12px;line-height:1.6;padding:14px 16px;border-radius:8px;margin-top:10px;overflow-x:auto}
+code{background:#fdeee6;color:#8a3415;font-family:'JetBrains Mono',Consolas,monospace;font-size:12px;padding:1px 6px;border-radius:5px;white-space:nowrap}
+.card a{color:#8a3415;font-weight:600}
+.footer{text-align:center;color:#90a4ae;font-size:12px;margin-top:44px;letter-spacing:.3px}
+@media (max-width:640px){.header{padding:32px 26px}.header h1{font-size:23px}.section{padding:26px 20px}td.topic{width:auto}td,th{padding:10px}}
+@media (prefers-reduced-motion:reduce){.sym{animation:none;display:none}}
+</style></head><body>
+<div id="math-bg" aria-hidden="true"></div>
+<div class="container">
+<header class="header"><div class="badge">Pre-read · Advanced Analytics with Python</div>
+<h1>Data Visualization 1<br>Mastering Matplotlib</h1><div class="sub">Read this before class. It takes about 10 minutes.</div></header>
+<section class="section" data-sym="📊"><h2><span class="num">1</span>What's Happening in This Lecture</h2>
+<p class="intro">Here's a sneak peek at everything we cover today, and why each one is worth showing up for.</p>
+<table><thead><tr><th>Topic</th><th>What It Covers</th></tr></thead><tbody><tr><td class="topic">Exploratory vs Explanatory</td><td>You already know how to make a chart. Today starts with the question of what the chart is <em>for</em>. Exploratory charts are many, quick and for you, to find something. Explanatory charts are one, deliberate and for someone else (a board, a client, a manager), to communicate a single finding. Every other skill in this lecture turns the first kind into the second.</td></tr><tr><td class="topic">Matplotlib Architecture: Figure, Axes, Axis</td><td>Seaborn draws the chart; Matplotlib owns the canvas it's drawn on. You'll learn the three objects every chart is made of: the <strong>Figure</strong> (the canvas), the <strong>Axes</strong> (one plot on it) and the <strong>Axis</strong> (an x or y ruler). You'll also learn the two ways to drive them: the quick <code>plt.</code> style you've used so far, and the <code>fig, ax = plt.subplots()</code> object API that gives you control over every chart.</td></tr><tr><td class="topic">Styling &amp; Titles</td><td>You'll take a plain bar chart and turn it, step by step, into one a board reads in seconds. That means colour used with intent (one highlight, everything else grey), removing clutter, and a title that states the finding. You'll also control legends, gridlines and ticks for charts with more than one series, all through <code>ax.</code> methods.</td></tr><tr><td class="topic">Subplots &amp; the Mini Dashboard</td><td>A dashboard is one Figure holding several Axes that tell one connected story. You'll use <code>plt.subplots(rows, cols)</code> to get a grid of plots, index them like a table, and compose a 2 × 2 one-page summary. Each panel is titled with its finding, and <code>fig.suptitle()</code> and <code>fig.tight_layout()</code> finish the page.</td></tr><tr><td class="topic">Chart Selection Framework</td><td>You'll pick the chart from the question, not the question from the chart. Two things decide it: the shape of the data (how many variables, categorical or continuous) and the job (explore or explain). This framework ties together every chart you've learned so far and previews where multivariate charts fit next.</td></tr><tr><td class="topic">Stacked &amp; Dodged Bars</td><td>When both variables are categories, a single bar per group hides what's inside it. Stacked bars show each group's total and its composition; dodged (side-by-side) bars make one segment easy to compare across groups. You'll build both and learn which question each one answers.</td></tr><tr><td class="topic">Using AI Well</td><td>AI tools such as Gemini in Colab are fast at boilerplate: subplot grids, tick formatting, rewriting <code>plt.</code> code as <code>ax.</code> code, explaining errors. You'll draw the line on what stays yours: choosing the chart, finding the insight, deciding what to highlight, and writing the title.</td></tr></tbody></table></section>
+<section class="section" data-sym="📈"><h2><span class="num">2</span>Real-World Use Cases</h2>
+<ul class="uses" style="margin-top:14px"><li><strong>Exploratory vs Explanatory</strong>: A product analyst makes a dozen quick charts to explore churn by plan, then rebuilds only the one that shows the problem for the leadership review.</li><li><strong>Matplotlib Architecture: Figure, Axes, Axis</strong>: An analyst inherits an old notebook full of <code>plt.</code> calls that set titles on the wrong chart, and rewrites it with <code>fig, ax</code> so every title, label and limit lands on the intended plot.</li><li><strong>Styling &amp; Titles</strong>: A category manager's slide shows revenue by category in grey with only the fastest-growing category in colour, under the title "Home Décor grew fastest this quarter". The room gets the point before anyone speaks.</li><li><strong>Subplots &amp; the Mini Dashboard</strong>: A growth analyst puts sign-ups, activation rate, revenue and churn on one 2 × 2 page for the weekly business review, each panel titled with its takeaway.</li><li><strong>Chart Selection Framework</strong>: Asked "how spread out are delivery times?", an operations analyst reaches for a histogram rather than a bar chart, because the question is about one continuous variable.</li><li><strong>Stacked &amp; Dodged Bars</strong>: A marketing analyst uses a stacked bar to show each city's orders split by payment method, then a dodged bar to compare UPI usage across cities.</li><li><strong>Using AI Well</strong>: An analyst asks Gemini to scaffold a 2 × 2 subplot grid in seconds, then spends their own time choosing what each panel shows and writing the one-line titles.</li></ul></section>
+<section class="section" data-sym="◦●◦"><h2><span class="num">3</span>Prerequisites from the Previous Class</h2>
+<p class="intro">Make sure these concepts from <strong>Data Visualization for Data Analytics</strong> (the Seaborn lecture in the Python module) are fresh. Today uses the same vgsales data and assumes you can already make these charts. The focus is on controlling and presenting them.</p>
+<table><thead><tr><th>Topic</th><th>What to Recall</th></tr></thead><tbody><tr><td class="topic">Core Seaborn Charts</td><td><code>countplot</code>, <code>barplot</code>, <code>histplot</code>, <code>lineplot</code>, <code>scatterplot</code> and <code>boxplot</code>, and which question each one answers. None of them is re-taught today.</td></tr><tr><td class="topic">Univariate &amp; Bivariate Analysis</td><td>Categorical vs continuous variables, and the chart that fits one variable or a pair of them. Today turns this into a full selection framework.</td></tr><tr><td class="topic">Titles, Labels &amp; Figure Size</td><td><code>plt.title()</code>, <code>plt.xlabel()</code>, <code>plt.ylabel()</code> and <code>plt.figure(figsize=...)</code>. You'll compare this <code>plt.</code> style with the object API.</td></tr><tr><td class="topic">plt.subplots() &amp; ax=</td><td>Creating side-by-side charts with <code>fig, axes = plt.subplots(1, 2)</code> and drawing on one with <code>ax=axes[0]</code>. You used <code>ax=</code> last time; today you'll use it on purpose.</td></tr><tr><td class="topic">Sorted Bar Charts</td><td>Sorting bars by value (for example with <code>order=vg['Genre'].value_counts().index</code>) and flipping to horizontal bars when labels are long.</td></tr><tr><td class="topic">Pandas Prep for Charts</td><td><code>value_counts()</code>, <code>groupby(...).mean()</code> and <code>sort_values()</code> to get the numbers a chart needs before you plot them.</td></tr></tbody></table></section>
+<section class="section" data-sym="▁▅▇"><h2><span class="num">4</span>Environment Setup</h2>
+<div class="setup"><div class="card"><h3>🛠 Tool: Google Colab (or Jupyter Notebook)</h3><p>Open a new notebook before class, and keep your notebook from the Seaborn lecture handy. The charts you made there are the starting point today.</p></div><div class="card"><h3>📦 Packages: NumPy, Pandas, Matplotlib, Seaborn</h3><p>All four come pre-installed in Colab. Locally, check that <code>import matplotlib.pyplot as plt</code> and <code>import seaborn as sns</code> both run without errors.</p></div><div class="card"><h3>📁 Dataset: <a href="https://drive.google.com/file/d/1iwgPA5Y8sjhnRUhSfV03EWKJMg4xw_x5/view" target="_blank" rel="noopener">vgsales.csv</a></h3><p>The same video game sales catalogue from the Seaborn lecture: one row per title, with platform, genre, publisher, year, and regional and global sales. Run this cell in Colab before class so the data is loaded:</p><pre>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+!gdown 1iwgPA5Y8sjhnRUhSfV03EWKJMg4xw_x5 -O vgsales.csv
+vg = pd.read_csv('vgsales.csv')
+vg.head()</pre></div></div></section>
+<div class="footer">Advanced Analytics with Python · Scaler DSML</div>
+</div>
+<script>
+(function(){var S=["📊", "📈", "📉", "▁▂▃▄▅▆▇", "▇▆▅▄▃▂▁", "┤", "├─", "─┼─", "│", "┬", "┴", "◦ ◦ ◦", "●  ●", "• • •", "○ ● ○", "╱╲╱", "─────", "╭────╮", "╰────╯", "▓░░", "░▓░", "░░▓", "x→", "y↑", "(0,0)", "x,y", "⬛⬜⬛", "⬜⬛⬜", "◔◑◕●", "○◔◑◕", "┌──┐", "└──┘", "▲", "▼", "◆", "◇", "≈", "∝", "~", "≠", "[bar]", "[line]", "[hist]", "[pie]", "fig", "ax", "plt", "sns"];var bg=document.getElementById('math-bg');
+for(var i=0;i<40;i++){var e=document.createElement('span');e.className='sym';e.textContent=S[Math.floor(Math.random()*S.length)];
+e.style.cssText='left:'+(Math.random()*100)+'%;font-size:'+(13+Math.random()*32)+'px;opacity:'+(0.035+Math.random()*0.055).toFixed(3)+';animation-duration:'+(22+Math.random()*45)+'s;animation-delay:'+(-Math.random()*65)+'s';bg.appendChild(e);}})();
+</script></body></html>
